@@ -4,23 +4,29 @@ import (
 	"go/ast"
 
 	"golang.org/x/tools/go/analysis"
+	"golang.org/x/tools/go/analysis/passes/inspect"
+	"golang.org/x/tools/go/ast/inspector"
 )
 
 var Analyzer = &analysis.Analyzer{
-	Name: "loglint",
-	Doc:  "checks for bad patterns of loggers messages",
-	Run:  run,
+	Name:     "log-linter",
+	Doc:      "checks for bad patterns of loggers messages",
+	Run:      run,
+	Requires: []*analysis.Analyzer{inspect.Analyzer},
 }
 
 func run(pass *analysis.Pass) (interface{}, error) {
-	inspect := func(node ast.Node) bool {
+	inspector := pass.ResultOf[inspect.Analyzer].(*inspector.Inspector)
+
+	nodeFilter := []ast.Node{
+		(*ast.CallExpr)(nil),
+	}
+
+	inspector.Preorder(nodeFilter, func(node ast.Node) {
 		callExpr, ok := node.(*ast.CallExpr)
-		if !ok {
-			return true
-		}
 		selectorExpr, ok := callExpr.Fun.(*ast.SelectorExpr)
 		if !ok {
-			return true
+			return
 		}
 		if isLogMethod(selectorExpr.Sel.Name) ||
 			isSlogMethod(selectorExpr.Sel.Name) ||
@@ -32,10 +38,6 @@ func run(pass *analysis.Pass) (interface{}, error) {
 
 			}
 		}
-		return true
-	}
-	for _, f := range pass.Files {
-		ast.Inspect(f, inspect)
-	}
+	})
 	return nil, nil
 }
