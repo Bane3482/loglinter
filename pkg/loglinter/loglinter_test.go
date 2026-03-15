@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/Bane3482/go-log-message-linter/pkg/analyzer"
+	"github.com/Bane3482/loglinter/pkg/loglinter"
 	"golang.org/x/tools/go/analysis/analysistest"
 )
 
@@ -16,5 +16,5 @@ func TestAll(t *testing.T) {
 	}
 
 	testdata := filepath.Join(filepath.Dir(filepath.Dir(wd)), "testdata")
-	analysistest.Run(t, testdata, analyzer.Analyzer, "code")
+	analysistest.Run(t, testdata, loglinter.Analyzer, "code")
 }
