@@ -22,13 +22,9 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		if !ok {
 			return true
 		}
-		xExpr, ok := selectorExpr.X.(*ast.Ident)
-		if !ok {
-			return true
-		}
-		if xExpr.Name == "log" && isLogMethod(selectorExpr.Sel.Name) ||
-			xExpr.Name == "slog" && isSlogMethod(selectorExpr.Sel.Name) ||
-			xExpr.Name == "zap" && isZapMethod(selectorExpr.Sel.Name) {
+		if isLogMethod(selectorExpr.Sel.Name) ||
+			isSlogMethod(selectorExpr.Sel.Name) ||
+			isZapMethod(selectorExpr.Sel.Name) {
 			for _, arg := range callExpr.Args {
 				if !isCorrectMessage(arg) {
 					pass.Reportf(node.Pos(), "Incorrect message format: %s", arg)
