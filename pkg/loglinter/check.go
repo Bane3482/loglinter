@@ -53,14 +53,20 @@ func isSensitiveData(name string) bool {
 		strings.Contains(name, "pin")
 }
 
-func isCorrectMessage(expr ast.Expr) bool {
+func isCorrectMessage(expr ast.Expr) (string, bool) {
 	switch n := expr.(type) {
 	case *ast.BinaryExpr:
 		{
 			if n.Op == token.ADD {
-				return isCorrectMessage(n.X) && isCorrectMessage(n.Y)
+				first, ok1 := isCorrectMessage(n.X)
+				second, ok2 := isCorrectMessage(n.Y)
+				if !ok1 {
+					return first, ok1
+				} else if !ok2 {
+					return second, ok2
+				}
 			}
-			return true
+			return "nil", true
 		}
 	case *ast.BasicLit:
 		{
@@ -68,21 +74,21 @@ func isCorrectMessage(expr ast.Expr) bool {
 				runes := ([]rune)(n.Value)
 				for i := 1; i+1 < len(runes); i++ {
 					if !isEnglishLetter(runes[i]) && !unicode.IsSpace(runes[i]) {
-						return false
+						return (string)(runes[1 : len(n.Value)-1]), false
 					} else if i == 1 && !isSmallLetter(runes[i]) {
-						return false
+						return (string)(runes[1 : len(n.Value)-1]), false
 					}
 				}
 			}
-			return true
+			return "nil", true
 		}
 	case *ast.Ident:
 		{
 			if isSensitiveData(n.Name) {
-				return false
+				return n.Name, false
 			}
-			return true
+			return "nil", true
 		}
 	}
-	return true
+	return "nil", true
 }

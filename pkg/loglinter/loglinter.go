@@ -23,7 +23,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 	}
 
 	inspector.Preorder(nodeFilter, func(node ast.Node) {
-		callExpr, ok := node.(*ast.CallExpr)
+		callExpr := node.(*ast.CallExpr)
 		selectorExpr, ok := callExpr.Fun.(*ast.SelectorExpr)
 		if !ok {
 			return
@@ -32,8 +32,8 @@ func run(pass *analysis.Pass) (interface{}, error) {
 			isSlogMethod(selectorExpr.Sel.Name) ||
 			isZapMethod(selectorExpr.Sel.Name) {
 			for _, arg := range callExpr.Args {
-				if !isCorrectMessage(arg) {
-					pass.Reportf(node.Pos(), "Incorrect message format: %s", arg)
+				if msg, ok := isCorrectMessage(arg); !ok {
+					pass.Reportf(node.Pos(), "Incorrect message format: %s", msg)
 				}
 
 			}
