@@ -9,7 +9,7 @@ import (
 )
 
 var Analyzer = &analysis.Analyzer{
-	Name:     "log-linter",
+	Name:     "loglinter",
 	Doc:      "checks for bad patterns of loggers messages",
 	Run:      run,
 	Requires: []*analysis.Analyzer{inspect.Analyzer},
