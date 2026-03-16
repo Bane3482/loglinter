@@ -14,7 +14,6 @@ func TestAll(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to get wd: %s", err)
 	}
-
 	testdata := filepath.Join(filepath.Dir(filepath.Dir(wd)), "testdata")
 	analysistest.Run(t, testdata, loglinter.Analyzer, "loglinter")
 }

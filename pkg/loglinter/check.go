@@ -32,36 +32,38 @@ func isLogMethod(name string) bool {
 	}
 }
 
-func isCorrectMessage(expr ast.Expr) (string, bool) {
+func isCorrectMessage(expr ast.Expr) (string, int) {
 	switch n := expr.(type) {
 	case *ast.BinaryExpr:
 		{
 			if n.Op == token.ADD {
 				first, ok1 := isCorrectMessage(n.X)
 				second, ok2 := isCorrectMessage(n.Y)
-				if !ok1 {
+				if ok1 != 0 {
 					return first, ok1
-				} else if !ok2 {
+				} else if ok2 != 0 {
 					return second, ok2
 				}
 			}
-			return "nil", true
+			return "nil", 0
 		}
 	case *ast.BasicLit:
 		{
 			if n.Kind == token.STRING {
-				if !isEnglishLetter(n.Value) || !isSmallLetter(n.Value) {
-					return n.Value, false
+				if !isEnglishLetter(n.Value) {
+					return n.Value, 1
+				} else if !isSmallLetter(n.Value) {
+					return n.Value, 3
 				}
 			}
-			return "nil", true
+			return "nil", 0
 		}
 	case *ast.Ident:
 		{
 			if isSensitiveData(n.Name) {
-				return n.Name, false
+				return n.Name, 2
 			}
 		}
 	}
-	return "nil", true
+	return "nil", 0
 }

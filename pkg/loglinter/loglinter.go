@@ -32,10 +32,9 @@ func run(pass *analysis.Pass) (interface{}, error) {
 			isSlogMethod(selectorExpr.Sel.Name) ||
 			isZapMethod(selectorExpr.Sel.Name) {
 			for _, arg := range callExpr.Args {
-				if msg, ok := isCorrectMessage(arg); !ok {
-					pass.Reportf(node.Pos(), "Incorrect message format: %s", msg)
+				if msg, ok := isCorrectMessage(arg); ok != 0 {
+					pass.Reportf(node.Pos(), "Incorrect message format, %s: %s", errorType[ok], msg)
 				}
-
 			}
 		}
 	})
