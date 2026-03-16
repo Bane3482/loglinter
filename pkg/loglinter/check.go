@@ -3,8 +3,6 @@ package loglinter
 import (
 	"go/ast"
 	"go/token"
-	"strings"
-	"unicode"
 )
 
 func isSlogMethod(name string) bool {
@@ -34,25 +32,6 @@ func isLogMethod(name string) bool {
 	}
 }
 
-func isEnglishLetter(r rune) bool {
-	return (r >= 'A' && r <= 'Z') || (r >= 'a' && r <= 'z')
-}
-
-func isSmallLetter(r rune) bool {
-	return (r >= 'a' && r <= 'z')
-}
-
-func isSensitiveData(name string) bool {
-	name = strings.ToLower(name)
-	return strings.Contains(name, "password") ||
-		strings.Contains(name, "token") ||
-		strings.Contains(name, "api") ||
-		strings.Contains(name, "ip") ||
-		strings.Contains(name, "ssh") ||
-		strings.Contains(name, "cvv") ||
-		strings.Contains(name, "pin")
-}
-
 func isCorrectMessage(expr ast.Expr) (string, bool) {
 	switch n := expr.(type) {
 	case *ast.BinaryExpr:
@@ -71,13 +50,8 @@ func isCorrectMessage(expr ast.Expr) (string, bool) {
 	case *ast.BasicLit:
 		{
 			if n.Kind == token.STRING {
-				runes := ([]rune)(n.Value)
-				for i := 1; i+1 < len(runes); i++ {
-					if !isEnglishLetter(runes[i]) && !unicode.IsSpace(runes[i]) {
-						return (string)(runes), false
-					} else if i == 1 && !isSmallLetter(runes[i]) {
-						return (string)(runes), false
-					}
+				if !isEnglishLetter(n.Value) || !isSmallLetter(n.Value) {
+					return n.Value, false
 				}
 			}
 			return "nil", true
@@ -87,7 +61,6 @@ func isCorrectMessage(expr ast.Expr) (string, bool) {
 			if isSensitiveData(n.Name) {
 				return n.Name, false
 			}
-			return "nil", true
 		}
 	}
 	return "nil", true
