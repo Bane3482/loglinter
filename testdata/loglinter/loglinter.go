@@ -26,9 +26,9 @@ func main() {
 	logger.Info("server started!🚀")
 	logger.Error("connection failed!!!")
 	logger.Warn("warning: something went wrong...")
-	logger.Info("user password: " + password)
+	logger.Info("user password " + password)
 	logger.Debug("api_key=" + apiKey)
-	logger.Info("token: " + token)
+	logger.Info("token " + token)
 
 	logger.Info("starting server on port 8080")
 	logger.Error("failed to connect to database")

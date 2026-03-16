@@ -74,9 +74,9 @@ func isCorrectMessage(expr ast.Expr) (string, bool) {
 				runes := ([]rune)(n.Value)
 				for i := 1; i+1 < len(runes); i++ {
 					if !isEnglishLetter(runes[i]) && !unicode.IsSpace(runes[i]) {
-						return (string)(runes[1 : len(n.Value)-1]), false
+						return (string)(runes), false
 					} else if i == 1 && !isSmallLetter(runes[i]) {
-						return (string)(runes[1 : len(n.Value)-1]), false
+						return (string)(runes), false
 					}
 				}
 			}
