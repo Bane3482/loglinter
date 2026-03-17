@@ -21,5 +21,5 @@ func (plugin) BuildAnalyzers() ([]*analysis.Analyzer, error) {
 }
 
 func (plugin) GetLoadMode() string {
-	return register.LoadModeSyntax
+	return register.LoadModeTypesInfo
 }
