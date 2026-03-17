@@ -23,13 +23,8 @@ func isZapMethod(name string) bool {
 	}
 }
 
-func isLogMethod(name string) bool {
-	switch name {
-	case "Print", "Printf", "Println", "Fatal", "Fatalf", "Fatalln", "Panic", "Panicf", "Panicln":
-		return true
-	default:
-		return false
-	}
+func isLoggerType(expr ast.Expr) string {
+	return "nil"
 }
 
 func isCorrectMessage(expr ast.Expr) (string, int) {

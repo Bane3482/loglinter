@@ -28,8 +28,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		if !ok {
 			return
 		}
-		if isLogMethod(selectorExpr.Sel.Name) ||
-			isSlogMethod(selectorExpr.Sel.Name) ||
+		if isSlogMethod(selectorExpr.Sel.Name) ||
 			isZapMethod(selectorExpr.Sel.Name) {
 			for _, arg := range callExpr.Args {
 				if msg, ok := isCorrectMessage(arg); ok != 0 {

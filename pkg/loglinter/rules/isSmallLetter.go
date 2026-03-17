@@ -1,4 +1,4 @@
-package loglinter
+package rules
 
 func isSmallLetter(s string) bool {
 	runes := ([]rune)(s)

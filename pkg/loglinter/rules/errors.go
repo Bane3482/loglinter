@@ -1,4 +1,4 @@
-package loglinter
+package rules
 
 var errorType = map[int]string{
 	1: "message contains not english text or special symbols",
