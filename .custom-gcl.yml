@@ -1,5 +1,5 @@
-version: v2.11.3  # Версия golangci-lint
+version: v2.11.3
 
 plugins:
   - module: 'github.com/Bane3482/loglinter/plugin'
-    version: v1.0.0
+    version: ./plugin/plugin.go
