@@ -69,6 +69,8 @@ func IsCorrectMessage(expr ast.Expr) (string, int) {
 					return n.Value, 1
 				} else if !isSmallLetter(n.Value) {
 					return n.Value, 3
+				} else if !isSpecialSymbol(n.Value) {
+					return n.Value, 4
 				}
 			}
 			return "nil", 0
