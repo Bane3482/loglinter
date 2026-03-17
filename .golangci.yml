@@ -1,19 +1,11 @@
 version: "2"
 
 linters:
+  default: none
+  enable:
+    - loglinter
   settings:
     custom:
-      'loglinter':
-        path: github.com/Bane3482/loglinter/loglinter.so
-        description: checks for bad patterns of loggers messages
-        original-url: github.com/Bane3482/loglinter
-
-# linters:
-#   default: none
-#   enable:
-#     - loglinter
-#   settings:
-#     custom:
-#       loglinter:
-#         type: "module"
-#         description: "checks log messages style and content"
+      loglinter:
+        type: "module"
+        description: "checks log messages style and content"
