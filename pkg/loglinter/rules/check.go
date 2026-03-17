@@ -9,15 +9,31 @@ import (
 	"golang.org/x/tools/go/analysis"
 )
 
-var loggerNames = []string{"log/slog", "go.uber.org/zap"}
+func IsLoggerType(pass *analysis.Pass, expr ast.Expr) bool {
 
-func IsLoggerType(pass *analysis.Pass, t types.Type) bool {
+	if ident, ok := expr.(*ast.Ident); ok {
+		obj := pass.TypesInfo.ObjectOf(ident)
+		if obj == nil {
+			return false
+		}
+		if pkg, ok := obj.(*types.PkgName); ok {
+			return pkg.Imported().Path() == "log/slog"
+		}
+	}
+
+	t := pass.TypesInfo.TypeOf(expr)
+
+	if t == nil {
+		return false
+	}
+
 	for {
 		switch tt := t.(type) {
 		case *types.Pointer:
 			t = tt.Elem()
+			continue
 		default:
-			return strings.Contains(t.Underlying().String(), "go.uber.org/zap")
+			return strings.Contains(tt.Underlying().String(), "go.uber.org/zap")
 		}
 	}
 }
@@ -49,9 +65,9 @@ func IsCorrectMessage(expr ast.Expr) (string, int) {
 	case *ast.BasicLit:
 		{
 			if n.Kind == token.STRING {
-				if isEnglishLetter(n.Value) {
+				if !isEnglishLetter(n.Value) {
 					return n.Value, 1
-				} else if isSmallLetter(n.Value) {
+				} else if !isSmallLetter(n.Value) {
 					return n.Value, 3
 				}
 			}
