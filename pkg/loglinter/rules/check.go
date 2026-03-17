@@ -3,28 +3,39 @@ package rules
 import (
 	"go/ast"
 	"go/token"
+	"go/types"
+	"slices"
+
+	"golang.org/x/tools/go/analysis"
 )
 
-func IsSlogMethod(name string) bool {
-	switch name {
-	case "Debug", "Info", "Warn", "Error":
-		return true
-	default:
-		return false
+var loggerNames = []string{"log/slog", "go.uber.org/zap"}
+
+func IsLoggerType(pass *analysis.Pass, tv types.TypeAndValue) bool {
+	t := tv.Type
+	for {
+		switch tt := t.Underlying().(type) {
+		case *types.Named:
+			pkg := tt.Obj().Pkg()
+			if pkg != nil && slices.Contains(loggerNames, pkg.Path()) {
+				return true
+			}
+			t = tt.Underlying()
+		case *types.Pointer:
+			t = tt.Elem()
+		default:
+			return false
+		}
 	}
 }
 
-func IsZapMethod(name string) bool {
+func IsLogMethod(name string) bool {
 	switch name {
 	case "Debug", "Info", "Warn", "Error", "DPanic", "Panic", "Fatal":
 		return true
 	default:
 		return false
 	}
-}
-
-func IsLoggerType(expr ast.Expr) string {
-	return "nil"
 }
 
 func IsCorrectMessage(expr ast.Expr) (string, int) {

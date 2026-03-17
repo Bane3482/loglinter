@@ -29,8 +29,11 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		if !ok {
 			return
 		}
-		if rules.IsSlogMethod(selectorExpr.Sel.Name) ||
-			rules.IsZapMethod(selectorExpr.Sel.Name) {
+		tv, ok := pass.TypesInfo.Types[callExpr.Fun]
+		if !ok {
+			return
+		}
+		if rules.IsLoggerType(pass, tv) && rules.IsLogMethod(selectorExpr.Sel.Name) {
 			for _, arg := range callExpr.Args {
 				if msg, ok := rules.IsCorrectMessage(arg); ok != 0 {
 					pass.Reportf(node.Pos(), "Incorrect message format, %s: %s", rules.ErrorType(ok), msg)
