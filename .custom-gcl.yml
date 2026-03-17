@@ -2,4 +2,4 @@ version: v2.11.3
 
 plugins:
   - module: 'github.com/Bane3482/loglinter/plugin'
-    version: ./plugin/plugin.go
+    version: ./pkg/loglinter/plugin/
