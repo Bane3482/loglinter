@@ -1,6 +1,6 @@
 version: v2.11.3
 
 plugins:
-  - module: 'github.com/Bane3482/loglinter/'
+  - module: 'github.com/Bane3482/loglinter'
     import: 'github.com/Bane3482/loglinter/plugin'
     path: .
