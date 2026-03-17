@@ -29,7 +29,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		if !ok {
 			return
 		}
-		tv, ok := pass.TypesInfo.Types[callExpr.Fun]
+		tv, ok := pass.TypesInfo.Types[selectorExpr.X]
 		if !ok {
 			return
 		}

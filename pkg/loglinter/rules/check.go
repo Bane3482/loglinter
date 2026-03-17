@@ -1,6 +1,7 @@
 package rules
 
 import (
+	"fmt"
 	"go/ast"
 	"go/token"
 	"go/types"
@@ -17,8 +18,13 @@ func IsLoggerType(pass *analysis.Pass, tv types.TypeAndValue) bool {
 		switch tt := t.Underlying().(type) {
 		case *types.Named:
 			pkg := tt.Obj().Pkg()
-			if pkg != nil && slices.Contains(loggerNames, pkg.Path()) {
-				return true
+			if pkg != nil {
+				fmt.Println(pkg.Path())
+				if slices.Contains(loggerNames, pkg.Path()) {
+					return true
+				}
+			} else {
+				fmt.Println("nulll")
 			}
 			t = tt.Underlying()
 		case *types.Pointer:
