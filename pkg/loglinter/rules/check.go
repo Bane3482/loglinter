@@ -1,36 +1,23 @@
 package rules
 
 import (
-	"fmt"
 	"go/ast"
 	"go/token"
 	"go/types"
-	"slices"
+	"strings"
 
 	"golang.org/x/tools/go/analysis"
 )
 
 var loggerNames = []string{"log/slog", "go.uber.org/zap"}
 
-func IsLoggerType(pass *analysis.Pass, tv types.TypeAndValue) bool {
-	t := tv.Type
+func IsLoggerType(pass *analysis.Pass, t types.Type) bool {
 	for {
-		switch tt := t.Underlying().(type) {
-		case *types.Named:
-			pkg := tt.Obj().Pkg()
-			if pkg != nil {
-				fmt.Println(pkg.Path())
-				if slices.Contains(loggerNames, pkg.Path()) {
-					return true
-				}
-			} else {
-				fmt.Println("nulll")
-			}
-			t = tt.Underlying()
+		switch tt := t.(type) {
 		case *types.Pointer:
 			t = tt.Elem()
 		default:
-			return false
+			return strings.Contains(t.Underlying().String(), "go.uber.org/zap")
 		}
 	}
 }
@@ -75,7 +62,9 @@ func IsCorrectMessage(expr ast.Expr) (string, int) {
 			if isSensitiveData(n.Name) {
 				return n.Name, 2
 			}
+			return "nil", 0
 		}
+	default:
+		return "nil", 0
 	}
-	return "nil", 0
 }
