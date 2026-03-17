@@ -13,7 +13,7 @@ func isSensitiveData(name string) bool {
 			strings.Contains(name, "pin")
 	}
 
-	if check(strings.ToLower(name)) {
+	if !check(strings.ToLower(name)) {
 		return false
 	}
 	return true

@@ -36,7 +36,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		if rules.IsLoggerType(pass, typOf) && rules.IsLogMethod(selectorExpr.Sel.Name) {
 			for _, arg := range callExpr.Args {
 				if msg, ok := rules.IsCorrectMessage(arg); ok != 0 {
-					pass.Reportf(node.Pos(), "Incorrect message format, %s: %s", rules.ErrorType(ok), msg)
+					pass.Reportf(node.Pos(), "Incorrect message format, %s: %s", rules.ErrorType(ok-1), msg)
 				}
 			}
 		}
