@@ -4,8 +4,3 @@ linters:
   default: none
   enable:
     - loglinter
-  settings:
-    custom:
-      loglinter:
-        type: module
-        description: checks for bad patterns of loggers messages
