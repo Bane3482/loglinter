@@ -1,5 +1,12 @@
 version: "2"
 
+linters-settings:
+  custom:
+    plugin:
+      path: "github.com/Bane3482/loglinter/plugin.so"
+      description: "Checks log messages"
+      original-url: "github.com/Bane3482/loglinter"
+
 linters:
   default: none
   enable:
