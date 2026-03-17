@@ -5,3 +5,7 @@ var errorType = map[int]string{
 	2: "message contains potencial sensitive data",
 	3: "message starts not from small letter",
 }
+
+func ErrorType(code int) string {
+	return errorType[code]
+}

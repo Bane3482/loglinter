@@ -3,6 +3,7 @@ package loglinter
 import (
 	"go/ast"
 
+	"github.com/Bane3482/loglinter/pkg/loglinter/rules"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
 	"golang.org/x/tools/go/ast/inspector"
@@ -28,11 +29,11 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		if !ok {
 			return
 		}
-		if isSlogMethod(selectorExpr.Sel.Name) ||
-			isZapMethod(selectorExpr.Sel.Name) {
+		if rules.IsSlogMethod(selectorExpr.Sel.Name) ||
+			rules.IsZapMethod(selectorExpr.Sel.Name) {
 			for _, arg := range callExpr.Args {
-				if msg, ok := isCorrectMessage(arg); ok != 0 {
-					pass.Reportf(node.Pos(), "Incorrect message format, %s: %s", errorType[ok], msg)
+				if msg, ok := rules.IsCorrectMessage(arg); ok != 0 {
+					pass.Reportf(node.Pos(), "Incorrect message format, %s: %s", rules.ErrorType(ok), msg)
 				}
 			}
 		}

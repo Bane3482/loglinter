@@ -1,11 +1,11 @@
-package loglinter
+package rules
 
 import (
 	"go/ast"
 	"go/token"
 )
 
-func isSlogMethod(name string) bool {
+func IsSlogMethod(name string) bool {
 	switch name {
 	case "Debug", "Info", "Warn", "Error":
 		return true
@@ -14,7 +14,7 @@ func isSlogMethod(name string) bool {
 	}
 }
 
-func isZapMethod(name string) bool {
+func IsZapMethod(name string) bool {
 	switch name {
 	case "Debug", "Info", "Warn", "Error", "DPanic", "Panic", "Fatal":
 		return true
@@ -23,17 +23,17 @@ func isZapMethod(name string) bool {
 	}
 }
 
-func isLoggerType(expr ast.Expr) string {
+func IsLoggerType(expr ast.Expr) string {
 	return "nil"
 }
 
-func isCorrectMessage(expr ast.Expr) (string, int) {
+func IsCorrectMessage(expr ast.Expr) (string, int) {
 	switch n := expr.(type) {
 	case *ast.BinaryExpr:
 		{
 			if n.Op == token.ADD {
-				first, ok1 := isCorrectMessage(n.X)
-				second, ok2 := isCorrectMessage(n.Y)
+				first, ok1 := IsCorrectMessage(n.X)
+				second, ok2 := IsCorrectMessage(n.Y)
 				if ok1 != 0 {
 					return first, ok1
 				} else if ok2 != 0 {
@@ -45,9 +45,9 @@ func isCorrectMessage(expr ast.Expr) (string, int) {
 	case *ast.BasicLit:
 		{
 			if n.Kind == token.STRING {
-				if !isEnglishLetter(n.Value) {
+				if isEnglishLetter(n.Value) {
 					return n.Value, 1
-				} else if !isSmallLetter(n.Value) {
+				} else if isSmallLetter(n.Value) {
 					return n.Value, 3
 				}
 			}
