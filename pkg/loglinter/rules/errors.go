@@ -1,10 +1,10 @@
 package rules
 
 var errorType = []string{
-	"message contains not english text",
-	"message contains potencial sensitive data",
-	"message starts not from small letter",
-	"message contains special symbols",
+	"Message contains not english text",
+	"Message contains potencial sensitive data",
+	"Message starts not from small letter",
+	"Message contains special symbols",
 }
 
 func ErrorType(code int) string {
