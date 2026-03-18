@@ -53,8 +53,8 @@ func main() {
 	slog.Error("connection failed!!!")
 	slog.Warn("warning: something went wrong...")
 	slog.Info("user password: " + password)
-	slog.Debug("api_key=" + apiKey)
-	slog.Info("token: " + token)
+	slog.Debug("api_key" + apiKey)
+	slog.Info("token " + token)
 
 	slog.Info("starting server on port 8080")
 	slog.Error("failed to connect to database")
