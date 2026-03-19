@@ -14,8 +14,8 @@ func main() {
 	token := "secretToken"
 
 	// Zap messages
-	logger.Info("Starting server on port 8080")      // want `message starts not from small letter`
-	logger.Error("Failed to connect to database")    // want `Incorrect message`
+	logger.Info("Starting server on port 8080")      // want `Message starts not from small letter`
+	logger.Error("Failed to connect to database")    // want `Message starts not from small letter`
 	logger.Info("запуск сервера")                    // want `Message contains not english text`
 	logger.Error("ошибка подключения к базе данных") // want `Message contains not english text`
 	logger.Info("server started!🚀")                  // want `Message contains special symbols`

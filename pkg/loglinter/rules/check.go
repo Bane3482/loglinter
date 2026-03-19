@@ -10,7 +10,6 @@ import (
 )
 
 func IsLoggerType(pass *analysis.Pass, expr ast.Expr) bool {
-
 	if ident, ok := expr.(*ast.Ident); ok {
 		obj := pass.TypesInfo.ObjectOf(ident)
 		if obj == nil {
@@ -33,7 +32,7 @@ func IsLoggerType(pass *analysis.Pass, expr ast.Expr) bool {
 			t = tt.Elem()
 			continue
 		default:
-			return strings.Contains(tt.Underlying().String(), "go.uber.org/zap")
+			return strings.Contains(tt.String(), "go.uber.org/zap")
 		}
 	}
 }
