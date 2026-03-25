@@ -2,12 +2,10 @@ package rules
 
 import "unicode"
 
-func isEnglishLetter(s string) bool {
-	runes := ([]rune)(s)
-
-	for i := 1; i+1 < len(runes); i++ {
-		if unicode.IsLetter(runes[i]) {
-			if !unicode.Is(unicode.Latin, runes[i]) {
+func isEnglishMessage(s string) bool {
+	for _, r := range s {
+		if unicode.IsLetter(r) {
+			if !((r >= 'A' && r <= 'Z') || (r >= 'a' && r <= 'z')) {
 				return false
 			}
 		}

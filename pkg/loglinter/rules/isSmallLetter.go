@@ -2,5 +2,8 @@ package rules
 
 func isSmallLetter(s string) bool {
 	runes := ([]rune)(s)
-	return (runes[1] >= 'a' && runes[1] <= 'z')
+	if len(runes) == 0 {
+		return false
+	}
+	return (runes[0] >= 'a' && runes[0] <= 'z')
 }

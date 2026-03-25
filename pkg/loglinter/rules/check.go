@@ -64,11 +64,12 @@ func IsCorrectMessage(expr ast.Expr) (string, int) {
 	case *ast.BasicLit:
 		{
 			if n.Kind == token.STRING {
-				if !isEnglishLetter(n.Value) {
+				str := n.Value[1 : len(n.Value)-1]
+				if !isEnglishMessage(str) {
 					return n.Value, 1
-				} else if !isSmallLetter(n.Value) {
+				} else if !isSmallLetter(str) {
 					return n.Value, 3
-				} else if !isSpecialSymbol(n.Value) {
+				} else if !isSpecialSymbol(str) {
 					return n.Value, 4
 				}
 			}
